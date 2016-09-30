@@ -71,10 +71,17 @@ public class Main {
             String usuarioId = req.params("usuarioId");
             
             PokemonDAO pokemonDAO = new PokemonDAO();
-            Connection conn = pokemonDAO.conectarse();
-            List<Pokemon> pokemones = 
-                    pokemonDAO.listar(conn, Long.parseLong(usuarioId));
-            return pokemones;
+            try{
+                Connection conn = pokemonDAO.conectarse();
+                List<Pokemon> pokemones = 
+                        pokemonDAO.listar(conn, Long.parseLong(usuarioId));
+                return pokemones;
+            } catch (SQLException | ClassNotFoundException ex) {
+                
+                return new GeneralResponse(new Status(1, "Error SQL: " + 
+                        ex.getMessage()));
+            }
+            
         }, new JsonTransformer());
         
         // Endpoint para parar el servidor

@@ -44,7 +44,7 @@ public class UsuarioDAO {
     }
     
     public void agregar(Connection conn, Usuario usuario) throws SQLException{
-        String sql = "INSERT usuario VALUES (username, password) VALUES (?,?)";
+        String sql = "INSERT INTO usuario (username, password) VALUES (?,?)";
         PreparedStatement ps = conn.prepareStatement(sql);
         
         ps.setString(1, usuario.getUsername());

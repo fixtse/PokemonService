@@ -26,8 +26,8 @@ public class PokemonDAO {
     public List<Pokemon> listar(Connection conn, long idUsuario) throws SQLException{
         String sql = "SELECT p.id as id, p.url as url ,p.nombre as nombre, "
                 + "p.nivel as nivel, p.tipo as tipo, p.descripcion as descripcion "
-                + "FROM usuario_pokemon up INNER JOIN pokemon p ON (up.pokemonId=p.id) "
-                + "WHERE up.userId=?";
+                + "FROM usuario_pokemon up INNER JOIN pokemon p ON (up.pokemonid=p.id) "
+                + "WHERE up.usuarioid=?";
         PreparedStatement ps = conn.prepareStatement(sql);
         
         ps.setLong(1, idUsuario);
