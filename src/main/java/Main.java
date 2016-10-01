@@ -1,5 +1,5 @@
 
-package pe.edu.ulima.ulpokemonapi.ulpokemonapi;
+
 
 import com.google.gson.Gson;
 import java.sql.Connection;
@@ -16,11 +16,14 @@ import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.PokemonDAO;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Usuario;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.UsuarioDAO;
 import static spark.Spark.get;
+import static spark.Spark.port;
 import static spark.Spark.post;
 import static spark.Spark.stop;
 
 public class Main {
     public static void main(String[] args){
+        port(Integer.parseInt(System.getenv("PORT")));
+        
         post("/usuarios/login", (req, resp)->{
             String data = req.body();
             
