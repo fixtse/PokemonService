@@ -77,7 +77,7 @@ public class Main {
             try{
                 Connection conn = pokemonDAO.conectarse();
                 List<Pokemon> pokemones = 
-                        pokemonDAO.listar(conn, Long.parseLong(usuarioId));
+                        pokemonDAO.listar(conn);
                 return pokemones;
             } catch (SQLException | ClassNotFoundException ex) {
                 
