@@ -1,4 +1,3 @@
-
 package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto;
 
 public class LoginResponse {

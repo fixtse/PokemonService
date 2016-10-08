@@ -6,18 +6,16 @@ public class Pokemon {
     private String nombre;
     private String tipo;
     private int nivel;
-    private String descripcion;
 
     public Pokemon() {
     }
 
-    public Pokemon(long id, String url, String nombre, String tipo, int nivel, String descripcion) {
+    public Pokemon(long id, String url, String nombre, String tipo, int nivel) {
         this.id = id;
         this.url = url;
         this.nombre = nombre;
         this.tipo = tipo;
         this.nivel = nivel;
-        this.descripcion = descripcion;
     }
 
     public long getId() {
@@ -59,14 +57,5 @@ public class Pokemon {
     public void setNivel(int nivel) {
         this.nivel = nivel;
     }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-    
     
 }

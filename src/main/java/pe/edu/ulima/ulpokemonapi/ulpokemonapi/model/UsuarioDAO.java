@@ -23,6 +23,7 @@ public class UsuarioDAO {
     
     public Usuario obtener(Connection conn, String usuario, String password) throws SQLException{
         String sql = "SELECT * FROM usuario WHERE username=? and password=?";
+        
         PreparedStatement ps = conn.prepareStatement(sql);
         
         ps.setString(1, usuario);

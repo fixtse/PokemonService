@@ -1,4 +1,3 @@
-
 package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto;
 
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Usuario;
