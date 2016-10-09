@@ -8,14 +8,17 @@ import java.util.List;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.GeneralResponse;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.IPokeAPIClient;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.JsonTransformer;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.LoginRequest;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.LoginResponse;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.PokeAPIResponse;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.PokemonResponse;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.RegistroRequest;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.LoginRequest;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.LoginResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon.PokeAPIResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon.PokemonResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.RegistroRequest;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.ServiceGenerator;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.Status;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.UsuarioResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.characteristic.CharacteristicResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.characteristic.Description;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon.Type;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.Status;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.UsuarioResponse;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Pokemon;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.PokemonDAO;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.UsuarioDAO;
@@ -102,14 +105,39 @@ public class Main {
         get("/pokemones/:pokemonid", (req, resp) -> {
             int pokemonId = Integer.valueOf(req.params("pokemonid"));
 
+            PokemonResponse pokemonResponse = new PokemonResponse();
+            
             IPokeAPIClient client = ServiceGenerator.createService(IPokeAPIClient.class);
-            Call<PokeAPIResponse> call = client.obtenerPokemon(pokemonId);
-            PokeAPIResponse pokeApiResponse = call.execute().body();
             
-            // Obtener el url con la imagen del pokemon
-            String url = "http://vignette3.wikia.nocookie.net/es.pokemon/images/8/86/Ivysaur.png";
+            // Obtener datos del pokemon
+            Call<PokeAPIResponse> datosCall = client.obtenerPokemon(pokemonId);
+            PokeAPIResponse pokeApiResponse = datosCall.execute().body();
+            pokemonResponse.setNombre(pokeApiResponse.getName());
+            pokemonResponse.setNivel(pokeApiResponse.getWeight());
+            String tipos = "";
+            for (int i = 0; i < pokeApiResponse.getTypes().size(); i++) {
+                tipos = tipos + pokeApiResponse.getTypes().get(i);
+                if (i + 1 != pokeApiResponse.getTypes().size()) {
+                    tipos = tipos + ", ";
+                }
+            }
+            pokemonResponse.setTipo(tipos);
+            pokemonResponse.setUrl(pokeApiResponse.getSprites().getUrl());
             
-            PokemonResponse pokemonResponse = new PokemonResponse(pokeApiResponse, url);
+            //Obtener descripción del pokemon
+            Call<CharacteristicResponse> descripcionCall = client.obtenerDescripcion(pokemonId);
+            CharacteristicResponse characteristicResponse = descripcionCall.execute().body();
+            
+            for (Description descripcion : characteristicResponse.getDescriptions()) {
+                if (descripcion.getLanguage().getName().equals("en")) {
+                    pokemonResponse.setDescripcion(descripcion.getDescription());
+                    break;
+                }
+            }
+            
+            if (pokemonResponse.getDescripcion().length() == 0) {
+                pokemonResponse.setDescripcion("No description available.");
+            }
 
             return pokemonResponse;
         }, new JsonTransformer());
