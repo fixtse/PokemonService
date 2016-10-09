@@ -3,6 +3,7 @@
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.GeneralResponse;
@@ -155,10 +156,11 @@ public class Main {
 
             Connection conn = null;
 
-            List<Integer> pokemones;
+            List<Integer> pokemones = new ArrayList<>();
             try {
                 conn = pokemonDAO.conectarse();
                 pokemones = pokemonDAO.obtenerDisponibles(conn, minuto);
+
             } catch (SQLException | ClassNotFoundException ex) {
                 return new GeneralResponse(new Status(1, "Error SQL: " + ex.getMessage()));
             } finally {
