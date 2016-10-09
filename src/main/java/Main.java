@@ -171,31 +171,6 @@ public class Main {
             return pokemones;
         }, new JsonTransformer());
         
-        /*
-        // Endpoint para registrar pokemones de un usuario
-        post("/pokemones/:pokemonid/:usuarioid", (req, resp) -> {
-            int pokemonId = Integer.valueOf(req.params("pokemonid"));
-            int usuarioId = Integer.valueOf(req.params("usuarioid"));
-
-            PokemonDAO pokemonDAO = new PokemonDAO();
-
-            Connection conn = null;
-
-            try {
-                conn = pokemonDAO.conectarse();
-                pokemonDAO.capturarPokemon(conn, pokemonId, usuarioId);
-            } catch (SQLException | ClassNotFoundException ex) {
-                return new GeneralResponse(new Status(1, "Error SQL: " + ex.getMessage()));
-            } finally {
-                if (conn != null) {
-                    pokemonDAO.desconectarse(conn);
-                }
-            }
-
-            return new GeneralResponse(new Status(0, ""));
-
-        }, new JsonTransformer());
-        */
         // Endpoint para registrar pokemones de un usuario
         post("/pokemones/atrapar", (req, resp) -> {
             String data = req.body();

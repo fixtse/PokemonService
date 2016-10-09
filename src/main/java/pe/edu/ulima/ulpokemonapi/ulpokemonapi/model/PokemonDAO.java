@@ -43,7 +43,7 @@ public class PokemonDAO {
     */
     
     public List<Integer> listar(Connection conn, int idUsuario) throws SQLException {
-        String sql = "SELECT pokemonid FROM pokemonxusuario WHERE usuarioid=?";
+        String sql = "SELECT pokemonid FROM pokemonXusuario WHERE usuarioid=?";
         PreparedStatement ps = conn.prepareStatement(sql);
 
         ps.setInt(1, idUsuario);
