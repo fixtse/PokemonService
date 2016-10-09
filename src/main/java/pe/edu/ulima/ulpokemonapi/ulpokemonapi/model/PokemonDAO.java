@@ -87,7 +87,7 @@ public class PokemonDAO {
         return idPokemones;
     }
 
-    public void capturarPokemon(Connection conn, int usuarioId, int pokemonId) throws SQLException {
+    public void capturarPokemon(Connection conn, int pokemonId, int usuarioId) throws SQLException {
         String sql = "INSERT INTO pokemonXusuario VALUES (?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
 

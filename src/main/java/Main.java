@@ -1,9 +1,6 @@
-
-
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.GeneralResponse;
@@ -17,6 +14,7 @@ import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.RegistroRequest;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.ServiceGenerator;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.characteristic.CharacteristicResponse;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.characteristic.Description;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon.AtraparRequest;
 //import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon.Type;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.Status;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.UsuarioResponse;
@@ -34,8 +32,8 @@ import static spark.Spark.post;
 public class Main {
 
     public static void main(String[] args) {
-        port(Integer.parseInt(System.getenv("PORT")));
-        //port(4567);
+        //port(Integer.parseInt(System.getenv("PORT")));
+        port(4567);
 
         // Endpoint para realizar un login
         post("/usuarios/login", (req, resp) -> {
@@ -172,11 +170,12 @@ public class Main {
 
             return pokemones;
         }, new JsonTransformer());
-
+        
+        /*
         // Endpoint para registrar pokemones de un usuario
-        post("/pokemones/:usuarioid/:pokemonid", (req, resp) -> {
-            int usuarioId = Integer.valueOf(req.params("usuarioid"));
+        post("/pokemones/:pokemonid/:usuarioid", (req, resp) -> {
             int pokemonId = Integer.valueOf(req.params("pokemonid"));
+            int usuarioId = Integer.valueOf(req.params("usuarioid"));
 
             PokemonDAO pokemonDAO = new PokemonDAO();
 
@@ -184,7 +183,32 @@ public class Main {
 
             try {
                 conn = pokemonDAO.conectarse();
-                pokemonDAO.capturarPokemon(conn, usuarioId, pokemonId);
+                pokemonDAO.capturarPokemon(conn, pokemonId, usuarioId);
+            } catch (SQLException | ClassNotFoundException ex) {
+                return new GeneralResponse(new Status(1, "Error SQL: " + ex.getMessage()));
+            } finally {
+                if (conn != null) {
+                    pokemonDAO.desconectarse(conn);
+                }
+            }
+
+            return new GeneralResponse(new Status(0, ""));
+
+        }, new JsonTransformer());
+        */
+        // Endpoint para registrar pokemones de un usuario
+        post("/pokemones/atrapar", (req, resp) -> {
+            String data = req.body();
+            
+            AtraparRequest request = new Gson().fromJson(data, AtraparRequest.class);
+
+            PokemonDAO pokemonDAO = new PokemonDAO();
+
+            Connection conn = null;
+
+            try {
+                conn = pokemonDAO.conectarse();
+                pokemonDAO.capturarPokemon(conn, request.getPokemonid(), request.getUsuarioid());
             } catch (SQLException | ClassNotFoundException ex) {
                 return new GeneralResponse(new Status(1, "Error SQL: " + ex.getMessage()));
             } finally {
