@@ -40,26 +40,17 @@ public class PokemonDAO {
         return pokemones;
     }
 
-    public List<Pokemon> listar(Connection conn, long idUsuario) throws SQLException {
-        String sql = "SELECT p.id as id, p.url as url ,p.nombre as nombre, "
-                + "p.nivel as nivel, p.tipo as tipo"
-                + "FROM pokemonxusuario pu INNER JOIN pokemon p ON (pu.pokemonid = p.id) "
-                + "WHERE pu.usuarioid=?";
+    public List<Integer> listar(Connection conn, int idUsuario) throws SQLException {
+        String sql = "SELECT pokemonid FROM pokemonxusuario WHERE usuarioid=?";
         PreparedStatement ps = conn.prepareStatement(sql);
 
-        ps.setLong(1, idUsuario);
+        ps.setInt(1, idUsuario);
 
         ResultSet rs = ps.executeQuery();
 
-        List<Pokemon> pokemones = new ArrayList<>();
+        List<Integer> pokemones = new ArrayList<>();
         while (rs.next()) {
-            pokemones.add(new Pokemon(
-                    rs.getLong("id"),
-                    rs.getString("url"),
-                    rs.getString("nombre"),
-                    rs.getString("tipo"),
-                    rs.getInt("nivel")
-            ));
+            pokemones.add(rs.getInt("pokemonid"));
         }
 
         return pokemones;

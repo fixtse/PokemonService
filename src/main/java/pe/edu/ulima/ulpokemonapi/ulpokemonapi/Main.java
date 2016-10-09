@@ -70,16 +70,16 @@ public class Main {
 
         // Endpoint para obtener el listado de pokemones por usuario
         get("/usuarios/:usuarioId/pokemones", (req, resp) -> {
-            String usuarioId = req.params("usuarioId");
+            int usuarioId = Integer.valueOf(req.params("usuarioId"));
 
             PokemonDAO pokemonDAO = new PokemonDAO();
 
             Connection conn = null;
 
-            List<Pokemon> pokemones;
+            List<Integer> pokemones;
             try {
                 conn = pokemonDAO.conectarse();
-                pokemones = pokemonDAO.listar(conn);
+                pokemones = pokemonDAO.listar(conn, usuarioId);
             } catch (SQLException | ClassNotFoundException ex) {
                 return new GeneralResponse(new Status(1, "Error SQL: " + ex.getMessage()));
             } finally {
