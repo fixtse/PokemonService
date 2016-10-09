@@ -32,8 +32,8 @@ import static spark.Spark.post;
 public class Main {
 
     public static void main(String[] args) {
-        //port(Integer.parseInt(System.getenv("PORT")));
-        port(4567);
+        port(Integer.parseInt(System.getenv("PORT")));
+        //port(4567);
 
         // Endpoint para realizar un login
         post("/usuarios/login", (req, resp) -> {
