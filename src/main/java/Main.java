@@ -10,6 +10,7 @@ import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.LoginRequest;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.LoginResponse;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.RegistroRequest;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.Status;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.UsuarioResponse;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Pokemon;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.PokemonDAO;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Usuario;
@@ -32,7 +33,7 @@ public class Main {
             UsuarioDAO usuarioDAO = new UsuarioDAO();
 
             Connection conn = usuarioDAO.conectarse();
-            Usuario usuario = usuarioDAO.obtener(conn, request.getUser(), request.getPassword());
+            UsuarioResponse usuario = usuarioDAO.obtener(conn, request.getUser(), request.getPassword());
 
             usuarioDAO.desconectarse(conn);
 

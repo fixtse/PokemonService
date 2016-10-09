@@ -1,21 +1,21 @@
 
-package pe.edu.ulima.ulpokemonapi.ulpokemonapi.model;
+package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto;
 
-public class Usuario {
+public class UsuarioResponse {
     private long id;
     private String username;
-    private String password;
+    private transient String password;
 
-    public Usuario() {
+    public UsuarioResponse() {
     }
 
-    public Usuario(long id, String username, String password) {
+    public UsuarioResponse(long id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
     }
 
-    public Usuario(String username, String password) {
+    public UsuarioResponse(String username, String password) {
         this.username = username;
         this.password = password;
     }

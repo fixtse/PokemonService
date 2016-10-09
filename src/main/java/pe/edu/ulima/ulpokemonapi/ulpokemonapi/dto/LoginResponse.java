@@ -1,11 +1,9 @@
 package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto;
 
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Usuario;
-
 public class LoginResponse {
     private String msg;
     private Status status;
-    private Usuario usuario;
+    private UsuarioResponse usuario;
 
     public LoginResponse() {
     }
@@ -19,7 +17,7 @@ public class LoginResponse {
         this.status = status;
     }
 
-    public LoginResponse(String msg, Status status, Usuario usuario) {
+    public LoginResponse(String msg, Status status, UsuarioResponse usuario) {
         this.msg = msg;
         this.status = status;
         this.usuario = usuario;
@@ -40,6 +38,12 @@ public class LoginResponse {
     public void setStatus(Status status) {
         this.status = status;
     }
-    
-    
+
+    public UsuarioResponse getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioResponse usuario) {
+        this.usuario = usuario;
+    }
 }

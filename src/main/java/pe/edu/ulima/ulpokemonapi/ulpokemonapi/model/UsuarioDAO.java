@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.UsuarioResponse;
 
 public class UsuarioDAO {
     public Connection conectarse() throws ClassNotFoundException, SQLException{
@@ -18,7 +19,7 @@ public class UsuarioDAO {
         conn.close();
     }
     
-    public Usuario obtener(Connection conn, String usuario, String password) throws SQLException{
+    public UsuarioResponse obtener(Connection conn, String usuario, String password) throws SQLException{
         String sql = "SELECT * FROM usuario WHERE username=? and password=?";
         
         PreparedStatement ps = conn.prepareStatement(sql);
@@ -28,9 +29,9 @@ public class UsuarioDAO {
         
         ResultSet rs = ps.executeQuery();
         
-        Usuario user = null;
+        UsuarioResponse user = null;
         if(rs.next()){
-            user = new Usuario(
+            user = new UsuarioResponse(
                     rs.getLong("id"),
                     rs.getString("username"),
                     rs.getString("password")
