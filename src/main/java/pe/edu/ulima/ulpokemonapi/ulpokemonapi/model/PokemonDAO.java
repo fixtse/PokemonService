@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+//import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +21,7 @@ public class PokemonDAO {
         conn.close();
     }
 
+    /*
     public List<Pokemon> listar(Connection conn) throws SQLException {
         String sql = "SELECT id, url, nombre, nivel, tipo FROM pokemon";
         Statement stmt = conn.createStatement();
@@ -39,7 +40,8 @@ public class PokemonDAO {
 
         return pokemones;
     }
-
+    */
+    
     public List<Integer> listar(Connection conn, int idUsuario) throws SQLException {
         String sql = "SELECT pokemonid FROM pokemonxusuario WHERE usuarioid=?";
         PreparedStatement ps = conn.prepareStatement(sql);
