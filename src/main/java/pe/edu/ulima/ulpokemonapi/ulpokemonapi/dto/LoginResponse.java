@@ -19,6 +19,12 @@ public class LoginResponse {
         this.status = status;
     }
 
+    public LoginResponse(String msg, Status status, Usuario usuario) {
+        this.msg = msg;
+        this.status = status;
+        this.usuario = usuario;
+    }
+
     public String getMsg() {
         return msg;
     }

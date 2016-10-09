@@ -37,9 +37,9 @@ public class Main {
             usuarioDAO.desconectarse(conn);
 
             if (usuario == null) {
-                return new LoginResponse("Error en login", new Status(0, ""));
+                return new LoginResponse("Error en login", new Status(0, ""), usuario);
             } else {
-                return new LoginResponse("", new Status(0, ""));
+                return new LoginResponse("", new Status(0, ""), usuario);
             }
         }, new JsonTransformer());
 
