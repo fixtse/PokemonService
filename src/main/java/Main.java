@@ -34,8 +34,8 @@ import static spark.Spark.post;
 public class Main {
 
     public static void main(String[] args) {
-        //port(Integer.parseInt(System.getenv("PORT")));
-        port(4567);
+        port(Integer.parseInt(System.getenv("PORT")));
+        //port(4567);
 
         // Endpoint para realizar un login
         post("/usuarios/login", (req, resp) -> {
@@ -148,7 +148,7 @@ public class Main {
         // Endpoint para obtener el listado de pokemones por usuario
         get("/disponibles", (req, resp) -> {
             Calendar ahora = Calendar.getInstance();
-            //ahora.add(Calendar.HOUR_OF_DAY, -5); // No funcionó cambiar el timezone
+            ahora.add(Calendar.HOUR_OF_DAY, -5); // No funcionó cambiar el timezone
             int horas = ahora.get(Calendar.HOUR_OF_DAY);
             int minutos = ahora.get(Calendar.MINUTE);
             int minuto = (horas * 60) + minutos;
