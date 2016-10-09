@@ -22,7 +22,7 @@ import static spark.Spark.post;
 public class Main {
 
     public static void main(String[] args) {
-        //port(Integer.parseInt(System.getenv("PORT")));
+        port(Integer.parseInt(System.getenv("PORT")));
 
         post("/usuarios/login", (req, resp) -> {
             String data = req.body();
