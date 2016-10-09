@@ -81,7 +81,7 @@ public class PokemonDAO {
 
         List<Integer> idPokemones = new ArrayList<>();
         while (rs.next()) {
-            idPokemones.add(rs.getInt("minuto"));
+            idPokemones.add(rs.getInt("id"));
         }
 
         return idPokemones;
