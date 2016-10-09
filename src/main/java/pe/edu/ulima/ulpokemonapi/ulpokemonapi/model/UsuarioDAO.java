@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class UsuarioDAO {
     public Connection conectarse() throws ClassNotFoundException, SQLException{
-        Class.forName("org.postgresql.Driver");
+        Class.forName(Parametros.DRIVER_CLASS);
         return DriverManager.getConnection(
                 Parametros.URL, 
                 Parametros.USER, 
