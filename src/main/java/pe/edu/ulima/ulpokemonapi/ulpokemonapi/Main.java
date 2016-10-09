@@ -6,15 +6,22 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.GeneralResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.IPokeAPIClient;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.JsonTransformer;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.LoginRequest;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.LoginResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.PokeAPIResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.PokemonResponse;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.RegistroRequest;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.ServiceGenerator;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.Status;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.UsuarioResponse;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Pokemon;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.PokemonDAO;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.UsuarioDAO;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import static spark.Spark.port;
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -69,8 +76,8 @@ public class Main {
         }, new JsonTransformer());
 
         // Endpoint para obtener el listado de pokemones por usuario
-        get("/usuarios/:usuarioId/pokemones", (req, resp) -> {
-            int usuarioId = Integer.valueOf(req.params("usuarioId"));
+        get("/usuarios/:usuarioid/pokemones", (req, resp) -> {
+            int usuarioId = Integer.valueOf(req.params("usuarioid"));
 
             PokemonDAO pokemonDAO = new PokemonDAO();
 
@@ -91,6 +98,22 @@ public class Main {
             return pokemones;
         }, new JsonTransformer());
 
+        // Endpoint para obtener datos del pokemon
+        get("/pokemones/:pokemonid", (req, resp) -> {
+            int pokemonId = Integer.valueOf(req.params("pokemonid"));
+
+            IPokeAPIClient client = ServiceGenerator.createService(IPokeAPIClient.class);
+            Call<PokeAPIResponse> call = client.obtenerPokemon(pokemonId);
+            PokeAPIResponse pokeApiResponse = call.execute().body();
+            
+            // Obtener el url con la imagen del pokemon
+            String url = "http://vignette3.wikia.nocookie.net/es.pokemon/images/8/86/Ivysaur.png";
+            
+            PokemonResponse pokemonResponse = new PokemonResponse(pokeApiResponse, url);
+
+            return pokemonResponse;
+        }, new JsonTransformer());
+
         // Endpoint para obtener el listado de pokemones por usuario
         get("/pokemones/disponibles", (req, resp) -> {
             Calendar ahora = Calendar.getInstance();
@@ -102,7 +125,7 @@ public class Main {
             PokemonDAO pokemonDAO = new PokemonDAO();
 
             Connection conn = null;
-            
+
             List<Integer> pokemones;
             try {
                 conn = pokemonDAO.conectarse();
@@ -126,7 +149,7 @@ public class Main {
             PokemonDAO pokemonDAO = new PokemonDAO();
 
             Connection conn = null;
-            
+
             try {
                 conn = pokemonDAO.conectarse();
                 pokemonDAO.capturarPokemon(conn, usuarioId, pokemonId);
