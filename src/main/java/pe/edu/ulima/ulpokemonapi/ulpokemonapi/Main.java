@@ -1,3 +1,4 @@
+package pe.edu.ulima.ulpokemonapi.ulpokemonapi;
 
 import com.google.gson.Gson;
 import java.sql.Connection;
@@ -13,7 +14,6 @@ import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.Status;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.UsuarioResponse;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Pokemon;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.PokemonDAO;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Usuario;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.UsuarioDAO;
 import static spark.Spark.port;
 import static spark.Spark.get;

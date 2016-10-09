@@ -71,12 +71,12 @@ public class PokemonDAO {
         
         if (minuto - 15 < 0) {
             limite = 1440 - (15 - minuto);
-            sql = "SELECT minuto FROM pokemon WHERE ABS(? - minuto) <= 15 OR minuto >= ?";
+            sql = "SELECT id FROM pokemon WHERE ABS(? - minuto) <= 15 OR minuto >= ?";
         } else if (minuto + 15 > 1439) {
             limite = 15 - (1440 - minuto);
-            sql = "SELECT minuto FROM pokemon WHERE ABS(? - minuto) <= 15 OR minuto <= ?";
+            sql = "SELECT id FROM pokemon WHERE ABS(? - minuto) <= 15 OR minuto <= ?";
         } else {
-            sql = "SELECT minuto FROM pokemon WHERE ABS(? - minuto) <= 15 OR 0 = ?" ;
+            sql = "SELECT id FROM pokemon WHERE ABS(? - minuto) <= 15 OR 0 = ?" ;
         }
 
         PreparedStatement ps = conn.prepareStatement(sql);

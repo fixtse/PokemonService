@@ -1,7 +1,7 @@
-
 package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto;
 
 public class UsuarioResponse {
+
     private long id;
     private String username;
     private transient String password;
@@ -28,7 +28,6 @@ public class UsuarioResponse {
         this.id = id;
     }
 
-
     public String getUsername() {
         return username;
     }
@@ -44,6 +43,4 @@ public class UsuarioResponse {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
 }
