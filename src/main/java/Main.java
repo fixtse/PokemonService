@@ -34,7 +34,8 @@ import static spark.Spark.post;
 public class Main {
 
     public static void main(String[] args) {
-        port(Integer.parseInt(System.getenv("PORT")));
+        //port(Integer.parseInt(System.getenv("PORT")));
+        port(4567);
 
         // Endpoint para realizar un login
         post("/usuarios/login", (req, resp) -> {
@@ -145,7 +146,7 @@ public class Main {
         }, new JsonTransformer());
 
         // Endpoint para obtener el listado de pokemones por usuario
-        get("/pokemones/disponibles", (req, resp) -> {
+        get("/disponibles", (req, resp) -> {
             Calendar ahora = Calendar.getInstance();
             //ahora.add(Calendar.HOUR_OF_DAY, -5); // No funcionó cambiar el timezone
             int horas = ahora.get(Calendar.HOUR_OF_DAY);
@@ -156,11 +157,11 @@ public class Main {
 
             Connection conn = null;
 
-            List<Integer> pokemones = new ArrayList<>();
+            List<Integer> pokemones;
             try {
                 conn = pokemonDAO.conectarse();
                 pokemones = pokemonDAO.obtenerDisponibles(conn, minuto);
-
+                
             } catch (SQLException | ClassNotFoundException ex) {
                 return new GeneralResponse(new Status(1, "Error SQL: " + ex.getMessage()));
             } finally {

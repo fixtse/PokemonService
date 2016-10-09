@@ -1,5 +1,6 @@
 package pe.edu.ulima.ulpokemonapi.ulpokemonapi.model;
 
+// No se usa actualmente
 public class Pokemon {
     private long id;
     private String url;
