@@ -34,8 +34,8 @@ import static spark.Spark.post;
 public class Main {
 
     public static void main(String[] args) {
-        port(Integer.parseInt(System.getenv("PORT")));
-        //port(4567);
+        //port(Integer.parseInt(System.getenv("PORT")));
+        port(4567);
 
         // Endpoint para realizar un login
         post("/usuarios/login", (req, resp) -> {
@@ -115,11 +115,11 @@ public class Main {
             // Obtener datos del pokemon
             Call<PokeAPIResponse> datosCall = client.obtenerPokemon(pokemonId);
             PokeAPIResponse pokeApiResponse = datosCall.execute().body();
-            pokemonResponse.setNombre(pokeApiResponse.getName());
+            pokemonResponse.setNombre(Character.toUpperCase(pokeApiResponse.getName().charAt(0)) + pokeApiResponse.getName().substring(1));
             pokemonResponse.setNivel(pokeApiResponse.getWeight());
             String tipos = "";
             for (int i = 0; i < pokeApiResponse.getTypes().size(); i++) {
-                tipos = tipos + pokeApiResponse.getTypes().get(i);
+                tipos = tipos + pokeApiResponse.getTypes().get(i).getType().getName();
                 if (i + 1 != pokeApiResponse.getTypes().size()) {
                     tipos = tipos + ", ";
                 }

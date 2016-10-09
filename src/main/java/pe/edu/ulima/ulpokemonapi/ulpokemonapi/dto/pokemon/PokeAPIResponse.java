@@ -9,10 +9,10 @@ public class PokeAPIResponse {
 
     private String name;
     private int weight; // Atributo se utilizará para el nivel del pokemon
-    private List<Type> types;
+    private List<ElementoType> types;
     private Sprite sprites;
 
-    public PokeAPIResponse(String name, int weight, List<Type> types, Sprite sprites) {
+    public PokeAPIResponse(String name, int weight, List<ElementoType> types, Sprite sprites) {
         this.name = name;
         this.weight = weight;
         this.types = types;
@@ -35,11 +35,11 @@ public class PokeAPIResponse {
         this.weight = weight;
     }
 
-    public List<Type> getTypes() {
+    public List<ElementoType> getTypes() {
         return types;
     }
 
-    public void setTypes(List<Type> types) {
+    public void setTypes(List<ElementoType> types) {
         this.types = types;
     }
 
