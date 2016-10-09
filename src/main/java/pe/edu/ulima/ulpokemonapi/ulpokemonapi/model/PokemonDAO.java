@@ -91,8 +91,8 @@ public class PokemonDAO {
         String sql = "INSERT INTO pokemonxusuario VALUES (?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
 
-        ps.setInt(1, usuarioId);
-        ps.setInt(2, pokemonId);
+        ps.setInt(1, pokemonId);
+        ps.setInt(2, usuarioId);
 
         ps.execute();
     }
