@@ -4,7 +4,7 @@ package pe.edu.ulima.ulpokemonapi.ulpokemonapi.model;
 public class Usuario {
     private long id;
     private String username;
-    private String password;
+    private transient String password;
 
     public Usuario() {
     }

@@ -1,8 +1,11 @@
 package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto;
 
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Usuario;
+
 public class LoginResponse {
     private String msg;
     private Status status;
+    private Usuario usuario;
 
     public LoginResponse() {
     }
