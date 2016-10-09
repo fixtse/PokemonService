@@ -10,11 +10,8 @@ import java.sql.SQLException;
 public class UsuarioDAO {
     public Connection conectarse() throws ClassNotFoundException, SQLException{
         Class.forName(Parametros.DRIVER_CLASS);
-        return DriverManager.getConnection(
-                Parametros.URL, 
-                Parametros.USER, 
-                Parametros.PASSWORD);
-        
+        return DriverManager.getConnection(Parametros.URL
+                + "?user=" + Parametros.USER + "&password=" + Parametros.PASSWORD);
     }
     
     public void desconectarse(Connection conn) throws SQLException{
