@@ -148,7 +148,7 @@ public class Main {
         // Endpoint para obtener el listado de pokemones por usuario
         get("/disponibles", (req, resp) -> {
             Calendar ahora = Calendar.getInstance();
-            ahora.add(Calendar.HOUR_OF_DAY, -5); // No funcionó cambiar el timezone
+            // El timezone se configuró como config variable en heroku
             int horas = ahora.get(Calendar.HOUR_OF_DAY);
             int minutos = ahora.get(Calendar.MINUTE);
             int minuto = (horas * 60) + minutos;
