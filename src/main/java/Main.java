@@ -3,18 +3,29 @@
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.GeneralResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.IPokeAPIClient;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.JsonTransformer;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.LoginRequest;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.LoginResponse;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.RegistroRequest;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.Status;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.UsuarioResponse;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Pokemon;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.LoginRequest;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.LoginResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon.PokeAPIResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon.PokemonResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.RegistroRequest;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.ServiceGenerator;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.characteristic.CharacteristicResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.characteristic.Description;
+//import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon.Type;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.Status;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.UsuarioResponse;
+//import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Pokemon;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.PokemonDAO;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.UsuarioDAO;
+import retrofit2.Call;
+//import retrofit2.Callback;
+//import retrofit2.Response;
 import static spark.Spark.port;
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -23,8 +34,11 @@ import static spark.Spark.post;
 public class Main {
 
     public static void main(String[] args) {
-        port(Integer.parseInt(System.getenv("$PORT")));
+        port(Integer.parseInt(System.getenv("PORT")));
+        //port(4567);
+        
 
+        // Endpoint para realizar un login
         post("/usuarios/login", (req, resp) -> {
             String data = req.body();
 
@@ -69,8 +83,8 @@ public class Main {
         }, new JsonTransformer());
 
         // Endpoint para obtener el listado de pokemones por usuario
-        get("/usuarios/:usuarioId/pokemones", (req, resp) -> {
-            int usuarioId = Integer.valueOf(req.params("usuarioId"));
+        get("/usuarios/:usuarioid/pokemones", (req, resp) -> {
+            int usuarioId = Integer.valueOf(req.params("usuarioid"));
 
             PokemonDAO pokemonDAO = new PokemonDAO();
 
@@ -91,10 +105,51 @@ public class Main {
             return pokemones;
         }, new JsonTransformer());
 
+        // Endpoint para obtener datos del pokemon
+        get("/pokemones/:pokemonid", (req, resp) -> {
+            int pokemonId = Integer.valueOf(req.params("pokemonid"));
+
+            PokemonResponse pokemonResponse = new PokemonResponse();
+            
+            IPokeAPIClient client = ServiceGenerator.createService(IPokeAPIClient.class);
+            
+            // Obtener datos del pokemon
+            Call<PokeAPIResponse> datosCall = client.obtenerPokemon(pokemonId);
+            PokeAPIResponse pokeApiResponse = datosCall.execute().body();
+            pokemonResponse.setNombre(pokeApiResponse.getName());
+            pokemonResponse.setNivel(pokeApiResponse.getWeight());
+            String tipos = "";
+            for (int i = 0; i < pokeApiResponse.getTypes().size(); i++) {
+                tipos = tipos + pokeApiResponse.getTypes().get(i);
+                if (i + 1 != pokeApiResponse.getTypes().size()) {
+                    tipos = tipos + ", ";
+                }
+            }
+            pokemonResponse.setTipo(tipos);
+            pokemonResponse.setUrl(pokeApiResponse.getSprites().getUrl());
+            
+            //Obtener descripción del pokemon
+            Call<CharacteristicResponse> descripcionCall = client.obtenerDescripcion(pokemonId);
+            CharacteristicResponse characteristicResponse = descripcionCall.execute().body();
+            
+            for (Description descripcion : characteristicResponse.getDescriptions()) {
+                if (descripcion.getLanguage().getName().equals("en")) {
+                    pokemonResponse.setDescripcion(descripcion.getDescription());
+                    break;
+                }
+            }
+            
+            if (pokemonResponse.getDescripcion().length() == 0) {
+                pokemonResponse.setDescripcion("No description available.");
+            }
+
+            return pokemonResponse;
+        }, new JsonTransformer());
+
         // Endpoint para obtener el listado de pokemones por usuario
-        get("/pokemones/disponibles", (req, resp) -> {
+        get("/disponibles", (req, resp) -> {
             Calendar ahora = Calendar.getInstance();
-            ahora.add(Calendar.HOUR_OF_DAY, -5); // No funcionó cambiar el timezone
+            // El timezone se configuró como config variable en heroku
             int horas = ahora.get(Calendar.HOUR_OF_DAY);
             int minutos = ahora.get(Calendar.MINUTE);
             int minuto = (horas * 60) + minutos;
@@ -102,11 +157,12 @@ public class Main {
             PokemonDAO pokemonDAO = new PokemonDAO();
 
             Connection conn = null;
-            
+
             List<Integer> pokemones;
             try {
                 conn = pokemonDAO.conectarse();
                 pokemones = pokemonDAO.obtenerDisponibles(conn, minuto);
+                
             } catch (SQLException | ClassNotFoundException ex) {
                 return new GeneralResponse(new Status(1, "Error SQL: " + ex.getMessage()));
             } finally {
@@ -126,7 +182,7 @@ public class Main {
             PokemonDAO pokemonDAO = new PokemonDAO();
 
             Connection conn = null;
-            
+
             try {
                 conn = pokemonDAO.conectarse();
                 pokemonDAO.capturarPokemon(conn, usuarioId, pokemonId);

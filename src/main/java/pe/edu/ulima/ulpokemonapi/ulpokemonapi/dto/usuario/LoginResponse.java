@@ -1,4 +1,4 @@
-package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto;
+package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario;
 
 public class LoginResponse {
     private String msg;

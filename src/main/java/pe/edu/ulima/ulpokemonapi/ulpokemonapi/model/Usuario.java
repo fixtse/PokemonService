@@ -2,7 +2,7 @@
 package pe.edu.ulima.ulpokemonapi.ulpokemonapi.model;
 
 public class Usuario {
-    private long id;
+    private transient long id;
     private String username;
     private String password;
 
@@ -44,6 +44,4 @@ public class Usuario {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
 }

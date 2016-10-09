@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.UsuarioResponse;
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.UsuarioResponse;
 
 public class UsuarioDAO {
     public Connection conectarse() throws ClassNotFoundException, SQLException{

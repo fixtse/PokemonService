@@ -1,5 +1,7 @@
 package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto;
 
+import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.Status;
+
 public class GeneralResponse {
     private Status status;
 
