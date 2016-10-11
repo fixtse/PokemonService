@@ -4,7 +4,7 @@ package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon;
  *
  * @author chfernandezrios
  */
-public class PokemonResponse {
+public class Pokemon {
 
     private String nombre;
     private int nivel;
@@ -12,10 +12,10 @@ public class PokemonResponse {
     private String descripcion;
     private String url;
 
-    public PokemonResponse() {
+    public Pokemon() {
     }
 
-    public PokemonResponse(String nombre, int nivel, String tipo, String descripcion, String url) {
+    public Pokemon(String nombre, int nivel, String tipo, String descripcion, String url) {
         this.nombre = nombre;
         this.nivel = nivel;
         this.tipo = tipo;
