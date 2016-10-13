@@ -98,50 +98,52 @@ public class Main {
                 conn = pokemonDAO.conectarse();
 
                 // Se obtiene la lista de ids de pokemones que ha capturado el usuario
-                List<Integer> pokemonIds = pokemonDAO.listar(conn, usuarioId);
+                List<Integer> pokemonesId = pokemonDAO.listar(conn, usuarioId);
 
-                // Se obtienen los datos de pokemon según cada id de la lista pokemonIds
-                Pokemon pokemon;
+                if (pokemonesId != null && !pokemonesId.isEmpty()) {
+                    // Se obtienen los datos de pokemon según cada id de la lista pokemonIds
+                    Pokemon pokemon;
 
-                Call<PokemonResponse> datosCall;
-                PokemonResponse pokeApiResponse;
-                String tipos;
+                    Call<PokemonResponse> datosCall;
+                    PokemonResponse pokeApiResponse;
+                    String tipos;
 
-                Call<CharacteristicResponse> descripcionCall;
-                CharacteristicResponse characteristicResponse;
-                for (Integer pokemonId : pokemonIds) {
-                    pokemon = new Pokemon();
-                    // Obtener datos del pokemon
-                    datosCall = client.obtenerPokemon(pokemonId);
-                    pokeApiResponse = datosCall.execute().body();
-                    pokemon.setNombre(Character.toUpperCase(pokeApiResponse.getNombre().charAt(0)) + pokeApiResponse.getNombre().substring(1));
-                    pokemon.setNivel(pokeApiResponse.getPeso());
-                    tipos = "";
-                    for (int i = 0; i < pokeApiResponse.getElementosTipo().size(); i++) {
-                        tipos = tipos + pokeApiResponse.getElementosTipo().get(i).getType().getName();
-                        if (i + 1 != pokeApiResponse.getElementosTipo().size()) {
-                            tipos = tipos + ", ";
+                    Call<CharacteristicResponse> descripcionCall;
+                    CharacteristicResponse characteristicResponse;
+                    for (Integer pokemonId : pokemonesId) {
+                        pokemon = new Pokemon();
+                        // Obtener datos del pokemon
+                        datosCall = client.obtenerPokemon(pokemonId);
+                        pokeApiResponse = datosCall.execute().body();
+                        pokemon.setNombre(Character.toUpperCase(pokeApiResponse.getNombre().charAt(0)) + pokeApiResponse.getNombre().substring(1));
+                        pokemon.setNivel(pokeApiResponse.getPeso());
+                        tipos = "";
+                        for (int i = 0; i < pokeApiResponse.getElementosTipo().size(); i++) {
+                            tipos = tipos + pokeApiResponse.getElementosTipo().get(i).getType().getName();
+                            if (i + 1 != pokeApiResponse.getElementosTipo().size()) {
+                                tipos = tipos + ", ";
+                            }
                         }
-                    }
-                    pokemon.setTipo(tipos);
-                    pokemon.setUrl(pokeApiResponse.getImagenUrl());
+                        pokemon.setTipo(tipos);
+                        pokemon.setUrl(pokeApiResponse.getImagenUrl());
 
-                    //Obtener descripción del pokemon
-                    descripcionCall = client.obtenerDescripcion(pokemonId);
-                    characteristicResponse = descripcionCall.execute().body();
+                        //Obtener descripción del pokemon
+                        descripcionCall = client.obtenerDescripcion(pokemonId);
+                        characteristicResponse = descripcionCall.execute().body();
 
-                    for (Description descripcion : characteristicResponse.getDescriptions()) {
-                        if (descripcion.getLanguage().getName().equals("en")) {
-                            pokemon.setDescripcion(descripcion.getDescription());
-                            break;
+                        if (characteristicResponse != null && !characteristicResponse.getDescriptions().isEmpty()) {
+                            for (Description descripcion : characteristicResponse.getDescriptions()) {
+                                if (descripcion.getLanguage().getName().equals("en")) {
+                                    pokemon.setDescripcion(descripcion.getDescription());
+                                    break;
+                                }
+                            }
+                        } else {
+                            pokemon.setDescripcion("No description available");
                         }
-                    }
 
-                    if (pokemon.getDescripcion().length() == 0) {
-                        pokemon.setDescripcion("No description available.");
+                        pokemones.add(pokemon);
                     }
-
-                    pokemones.add(pokemon);
                 }
             } catch (SQLException | ClassNotFoundException ex) {
                 return new GeneralResponse(new Status(1, "Error SQL: " + ex.getMessage()));
@@ -243,7 +245,7 @@ public class Main {
                 conn = pokemonDAO.conectarse();
                 pokemonesId = pokemonDAO.obtenerDisponibles(conn, minuto);
 
-                if (pokemonesId.size() > 0) {
+                if (pokemonesId != null && !pokemonesId.isEmpty()) {
                     String pokemonNombre;
                     String pokemonImagenUrl;
 
