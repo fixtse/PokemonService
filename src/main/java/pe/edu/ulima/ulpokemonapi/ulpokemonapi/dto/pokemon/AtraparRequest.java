@@ -4,11 +4,11 @@ package pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon;
  *
  * @author chfernandezrios
  */
-public class CercanosRequest {
+public class AtraparRequest {
     private int pokemonid;
     private int usuarioid;
 
-    public CercanosRequest(int pokemonid, int usuarioid) {
+    public AtraparRequest(int pokemonid, int usuarioid) {
         this.pokemonid = pokemonid;
         this.usuarioid = usuarioid;
     }
