@@ -255,7 +255,7 @@ public class Main {
                         pokemonesDisponiblesCall = client.obtenerPokemonDisponible(pokemonId);
                         pokemonDisponibleResponse = pokemonesDisponiblesCall.execute().body();
 
-                        pokemonNombre = pokemonDisponibleResponse.getNombre();
+                        pokemonNombre = Character.toUpperCase(pokemonDisponibleResponse.getNombre().charAt(0)) + pokemonDisponibleResponse.getNombre().substring(1);
                         pokemonImagenUrl = pokemonDisponibleResponse.getImagenUrl();
 
                         pokemonesDisponibles.add(new PokemonDisponible(pokemonId, pokemonNombre, pokemonImagenUrl));
