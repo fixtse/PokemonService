@@ -36,7 +36,7 @@ public class Main {
         //IPokeAPIClient client = ServiceGenerator.createService(IPokeAPIClient.class);
         
         //Endpoint para sumar
-        get("/suma", (req, resp) -> {
+        post("/suma", (req, resp) -> {
             
             NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);
             
@@ -45,7 +45,7 @@ public class Main {
                    +numeros.getNum2();
         });
         
-        get("/resta", (req, resp) -> {
+        post("/resta", (req, resp) -> {
             
             NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);
             
@@ -54,7 +54,7 @@ public class Main {
                    -numeros.getNum2();
         });
         
-        get("/multi", (req, resp) -> {
+        post("/multi", (req, resp) -> {
             
             NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);
             
@@ -63,7 +63,7 @@ public class Main {
                    *numeros.getNum2();
         });
         
-        get("/divi", (req, resp) -> {
+        post("/divi", (req, resp) -> {
             
             NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);
             
