@@ -68,8 +68,8 @@ public class Main {
             NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);
             
             
-            return numeros.getNum1()
-                   /numeros.getNum2();
+            return (numeros.getNum1()
+                   /numeros.getNum2())*2;
         });
         
 
