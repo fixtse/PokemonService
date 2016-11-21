@@ -1,5 +1,6 @@
 
 import com.google.gson.Gson;
+import pe.edu.clases.Suministro;
 
 import pe.edu.mongo.UsuarioDAO;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.LoginRequest;
@@ -36,18 +37,20 @@ public class Main {
             
             
             UsuarioDAO user = new UsuarioDAO();
-            LoginRequest log = new Gson().fromJson(req.body(), LoginRequest.class);            
-            if (user.validarUsuario(log.getUser(), log.getPassword())){
-                int tipo = user.getTipo(log.getUser());
-                return tipo;
+            Suministro sum = new Gson().fromJson(req.body(), Suministro.class);
+            
+            if(user.verSuministro(sum).getNum()!=1){
+                return 1;
             }else{
                 return 0;
-            }         
+            }            
+                  
             
             
             
         });
         
+               
         post("/resta", (req, resp) -> {
             
             NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);

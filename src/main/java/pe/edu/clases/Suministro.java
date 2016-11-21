@@ -20,6 +20,9 @@ public class Suministro {
         this.consumo = consumo;
         this.fecha = fecha;
     }
+
+    public Suministro() {
+    }
     
     
 

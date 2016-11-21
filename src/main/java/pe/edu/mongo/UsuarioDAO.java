@@ -96,18 +96,23 @@ public class UsuarioDAO {
         return usuario;
     }
     
-    public int verSuministro(Suministro sum) throws UnknownHostException, Exception{
-        int resp;
+    public Suministro verSuministro(Suministro sum) throws UnknownHostException, Exception{
+        Suministro resp = new Suministro();
         DB db = Coneccion.connectToMongo();
         DBCollection coll = db.getCollection("Suministros");
         BasicDBObject query = new BasicDBObject("id", sum.getNum());
         DBObject obj = coll.findOne(query);
         
-        if (obj.get("id").toString().isEmpty()){
-            resp = 0;
-        }else{
-            resp = 1;
+        resp.setNum(1);
+        if (obj!=null){
+            resp.setNum(Integer.valueOf(obj.get("id").toString()));
+            resp.setConsumo(Integer.valueOf(obj.get("con").toString()));
+            resp.setFecha(obj.get("fec").toString());
         }
+        
+        
+         
+        
         
         return resp;
     }
