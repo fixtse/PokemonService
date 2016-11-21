@@ -11,6 +11,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import java.net.UnknownHostException;
 import org.bson.types.ObjectId;
+import pe.edu.clases.Suministro;
 import pe.edu.clases.Usuario;
 
 /**
@@ -93,6 +94,22 @@ public class UsuarioDAO {
                 (Integer)obj.get("tipo"), obj.get("id_paciente").toString());
          
         return usuario;
+    }
+    
+    public int verSuministro(Suministro sum) throws UnknownHostException, Exception{
+        int resp;
+        DB db = Coneccion.connectToMongo();
+        DBCollection coll = db.getCollection("Suministros");
+        BasicDBObject query = new BasicDBObject("id", sum.getNum());
+        DBObject obj = coll.findOne(query);
+        
+        if (obj.get("id").toString().isEmpty()){
+            resp = 0;
+        }else{
+            resp = 1;
+        }
+        
+        return resp;
     }
     
     public String obtenerNombreUsuario(String id) throws UnknownHostException, Exception{

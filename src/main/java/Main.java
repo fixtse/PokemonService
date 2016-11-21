@@ -32,6 +32,22 @@ public class Main {
             
         });
         
+        post("/verSum", (req, resp) -> {
+            
+            
+            UsuarioDAO user = new UsuarioDAO();
+            LoginRequest log = new Gson().fromJson(req.body(), LoginRequest.class);            
+            if (user.validarUsuario(log.getUser(), log.getPassword())){
+                int tipo = user.getTipo(log.getUser());
+                return tipo;
+            }else{
+                return 0;
+            }         
+            
+            
+            
+        });
+        
         post("/resta", (req, resp) -> {
             
             NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);
