@@ -1,31 +1,11 @@
 
 import com.google.gson.Gson;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.GeneralResponse;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.IPokeAPIClient;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.JsonTransformer;
+
+import pe.edu.mongo.UsuarioDAO;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.LoginRequest;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.LoginResponse;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.RegistroRequest;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.ServiceGenerator;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.NumReq;
-//import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.pokemon.Type;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.Status;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.UsuarioResponse;
-//import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.Pokemon;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.PokemonDAO;
-import pe.edu.ulima.ulpokemonapi.ulpokemonapi.model.UsuarioDAO;
-import retrofit2.Call;
-//import retrofit2.Callback;
-//import retrofit2.Response;
 import static spark.Spark.port;
-import static spark.Spark.get;
 import static spark.Spark.post;
-//import static spark.Spark.stop;
 
 public class Main {
 
@@ -36,13 +16,20 @@ public class Main {
         //IPokeAPIClient client = ServiceGenerator.createService(IPokeAPIClient.class);
         
         //Endpoint para sumar
-        post("/suma", (req, resp) -> {
-            
-            NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);
+        post("/usuario", (req, resp) -> {
             
             
-            return numeros.getNum1()
-                   +numeros.getNum2();
+            UsuarioDAO user = new UsuarioDAO();
+            LoginRequest log = new Gson().fromJson(req.body(), LoginRequest.class);            
+            if (user.validarUsuario(log.getUser(), log.getPassword())){
+                int tipo = user.getTipo(log.getUser());
+                return tipo;
+            }else{
+                return 0;
+            }         
+            
+            
+            
         });
         
         post("/resta", (req, resp) -> {
