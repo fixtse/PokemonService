@@ -111,7 +111,8 @@ public class UsuarioDAO {
             BasicDBObject doc = new BasicDBObject("id", resp.getNum())
                 .append("con", resp.getConsumo())
                 .append("fec", resp.getFecha()); 
-            coll.update(query, doc);
+            //coll.update(query, doc);
+            coll.insert(doc);
         }
         
         
