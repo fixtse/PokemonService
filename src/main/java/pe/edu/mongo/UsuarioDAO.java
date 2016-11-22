@@ -108,19 +108,17 @@ public class UsuarioDAO {
             resp.setNum(Integer.valueOf(obj.get("id").toString()));
             resp.setConsumo(Integer.valueOf(obj.get("con").toString()));
             resp.setFecha(obj.get("fec").toString());
-            BasicDBObject doc = new BasicDBObject("id", resp.getNum())
-                .append("con", resp.getConsumo())
-                .append("fec", resp.getFecha()); 
+            BasicDBObject doc = new BasicDBObject("id", sum.getNum())
+                .append("con", sum.getConsumo())
+                .append("fec", sum.getFecha()); 
             //coll.update(query, doc);
             coll.insert(doc);
         }
-        
-        
-         
-        
-        
+                
         return resp;
     }
+    
+    
     
     public String obtenerNombreUsuario(String id) throws UnknownHostException, Exception{
                 
