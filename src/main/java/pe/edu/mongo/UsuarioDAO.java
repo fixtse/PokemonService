@@ -108,6 +108,10 @@ public class UsuarioDAO {
             resp.setNum(Integer.valueOf(obj.get("id").toString()));
             resp.setConsumo(Integer.valueOf(obj.get("con").toString()));
             resp.setFecha(obj.get("fec").toString());
+            BasicDBObject doc = new BasicDBObject("id", resp.getNum())
+                .append("con", resp.getConsumo())
+                .append("fec", resp.getFecha()); 
+            coll.update(query, doc);
         }
         
         
