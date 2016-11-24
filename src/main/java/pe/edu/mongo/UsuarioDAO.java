@@ -99,12 +99,15 @@ public class UsuarioDAO {
     public Suministro verSuministro(Suministro sum) throws UnknownHostException, Exception{
         Suministro resp = new Suministro();
         DB db = Coneccion.connectToMongo();
-        DBCollection coll = db.getCollection("Suministros");
-        BasicDBObject query = new BasicDBObject("id", sum.getNum());
+        DBCollection coll = db.getCollection("Pacientes");
+        BasicDBObject query = new BasicDBObject("suministro", sum.getNum());
         DBObject obj = coll.findOne(query);
         
         resp.setNum("1");
         if (obj!=null){
+            coll = db.getCollection("Suministros");
+            query = new BasicDBObject("id", sum.getNum());
+            obj = coll.findOne(query);
             resp.setNum(obj.get("id").toString());
             resp.setConsumo(Integer.valueOf(obj.get("con").toString()));
             resp.setFecha(obj.get("fec").toString());
