@@ -39,7 +39,7 @@ public class Main {
             UsuarioDAO user = new UsuarioDAO();
             Suministro sum = new Gson().fromJson(req.body(), Suministro.class);
             
-            if(user.verSuministro(sum).getNum().equals("1")){
+            if(!user.verSuministro(sum).getNum().equals("1")){
                 return 1;
             }else{
                 return 0;
