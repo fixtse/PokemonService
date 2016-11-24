@@ -1,5 +1,6 @@
 
 import com.google.gson.Gson;
+import java.util.List;
 import pe.edu.clases.Paciente;
 import pe.edu.clases.Suministro;
 import pe.edu.mongo.PacienteDAO;
@@ -85,9 +86,11 @@ public class Main {
         post("/listar", (req, resp) -> {
             
             String id = new Gson().fromJson(req.body(), String.class);
+            PacienteDAO dao = new PacienteDAO();
+            List<Paciente> pacientes  = dao.listarPacientes();
             
             
-            return id;
+            return pacientes;
         });
         
 

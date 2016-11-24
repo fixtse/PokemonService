@@ -6,13 +6,14 @@
 
 package pe.edu.clases;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 /**
  *
  * @author Kevin
  */
-public class Paciente {
+public class Paciente implements Serializable{
     private String id;
     private String nombres;
     private String paterno;
