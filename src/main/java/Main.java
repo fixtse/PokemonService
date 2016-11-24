@@ -1,5 +1,6 @@
 
 import com.google.gson.Gson;
+import pe.edu.clases.Paciente;
 import pe.edu.clases.Suministro;
 import pe.edu.mongo.PacienteDAO;
 
@@ -61,12 +62,24 @@ public class Main {
             return id;
         });
         
-        post("/modificar", (req, resp) -> {
+        post("/mostrar", (req, resp) -> {
             
             String id = new Gson().fromJson(req.body(), String.class);
+            PacienteDAO dao = new PacienteDAO();
+            Paciente paciente = dao.obtenerPaciente(id);        
+        
+            
+            return paciente;
+        });
+        
+        post("/modificar", (req, resp) -> {
+            
+            Paciente p = new Gson().fromJson(req.body(), Paciente.class);
+            PacienteDAO dao = new PacienteDAO();
+            dao.actualizarPaciente(p);
             
             
-            return id;
+            return "1";
         });
         
         post("/listar", (req, resp) -> {
