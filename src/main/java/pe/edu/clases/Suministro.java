@@ -11,11 +11,11 @@ package pe.edu.clases;
  */
 public class Suministro {
     
-    private int num;
+    private String num;
     private int consumo;
     private String fecha;
 
-    public Suministro(int num, int consumo, String fecha) {
+    public Suministro(String num, int consumo, String fecha) {
         this.num = num;
         this.consumo = consumo;
         this.fecha = fecha;
@@ -35,16 +35,16 @@ public class Suministro {
     }
     
 
-    public Suministro(int num, int consumo) {
+    public Suministro(String num, int consumo) {
         this.num = num;
         this.consumo = consumo;
     }
 
-    public int getNum() {
+    public String getNum() {
         return num;
     }
 
-    public void setNum(int num) {
+    public void setNum(String num) {
         this.num = num;
     }
 

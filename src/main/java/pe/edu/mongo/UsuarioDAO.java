@@ -103,9 +103,9 @@ public class UsuarioDAO {
         BasicDBObject query = new BasicDBObject("id", sum.getNum());
         DBObject obj = coll.findOne(query);
         
-        resp.setNum(1);
+        resp.setNum("1");
         if (obj!=null){
-            resp.setNum(Integer.valueOf(obj.get("id").toString()));
+            resp.setNum(obj.get("id").toString());
             resp.setConsumo(Integer.valueOf(obj.get("con").toString()));
             resp.setFecha(obj.get("fec").toString());
             BasicDBObject doc = new BasicDBObject("id", sum.getNum())
