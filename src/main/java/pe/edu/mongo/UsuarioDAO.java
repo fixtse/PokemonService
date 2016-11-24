@@ -56,6 +56,28 @@ public class UsuarioDAO {
         return b;
     }
     
+    public Suministro verSuministro(Suministro sum) throws UnknownHostException, Exception{
+        Suministro resp = new Suministro();
+        DB db = Coneccion.connectToMongo();
+        DBCollection coll = db.getCollection("Pacientes");
+        BasicDBObject query = new BasicDBObject("suministro", sum.getNum());
+        DBObject obj = coll.findOne(query);
+        
+        resp.setNum("1");
+        if (obj!=null){            
+            DBCollection coll2 = db.getCollection("Suministros");            
+            BasicDBObject doc = new BasicDBObject("id", sum.getNum())
+                .append("con", sum.getConsumo())
+                .append("fec", sum.getFecha()); 
+            //coll.update(query, doc);
+            coll2.insert(doc);
+            return sum;
+        }
+                
+        return resp;
+    }
+    
+    
     public boolean verificarExisteUsuario(String usuario) throws UnknownHostException, Exception {        
         boolean b=false;
         DB db = Coneccion.connectToMongo();
@@ -95,29 +117,6 @@ public class UsuarioDAO {
          
         return usuario;
     }
-    
-    public Suministro verSuministro(Suministro sum) throws UnknownHostException, Exception{
-        Suministro resp = new Suministro();
-        DB db = Coneccion.connectToMongo();
-        DBCollection coll = db.getCollection("Pacientes");
-        BasicDBObject query = new BasicDBObject("suministro", sum.getNum());
-        DBObject obj = coll.findOne(query);
-        
-        resp.setNum("1");
-        if (obj!=null){            
-            DBCollection coll2 = db.getCollection("Suministros");            
-            BasicDBObject doc = new BasicDBObject("id", sum.getNum())
-                .append("con", sum.getConsumo())
-                .append("fec", sum.getFecha()); 
-            //coll.update(query, doc);
-            coll2.insert(doc);
-            return sum;
-        }
-                
-        return resp;
-    }
-    
-    
     
     public String obtenerNombreUsuario(String id) throws UnknownHostException, Exception{
                 

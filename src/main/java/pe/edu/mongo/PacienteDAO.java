@@ -32,7 +32,7 @@ public class PacienteDAO {
                 .append("aPaterno", paterno)
                 .append("aMaterno", materno)
                 .append("fecnac", fecha_nacimiento)
-                .append("correo",correo);
+                .append("suministro",correo);
         coll.insert(doc);
         BasicDBObject query = new BasicDBObject("nombres", nombres).append("aPaterno", paterno).append("aMaterno", materno);
         DBObject obj = coll.findOne(query);
@@ -60,8 +60,8 @@ public class PacienteDAO {
                 String aPaterno = doc.get("aPaterno").toString();
                 String aMaterno = doc.get("aMaterno").toString();
                 String fecnac = doc.get("fecnac").toString();
-                String correo = doc.get("correo").toString();
-                int checkin = obtenercant(id);
+                String correo = doc.get("suministro").toString();
+                int checkin = obtenercant(correo);
                 
                 
                 Paciente paciente = new Paciente(id, nombres, aPaterno, aMaterno, fecnac, correo,checkin);
@@ -77,20 +77,20 @@ public class PacienteDAO {
         
         DB db = Coneccion.connectToMongo();
         int co=0;
-        DBCollection collectionUsuarios = db.getCollection("Usuarios");
-        BasicDBObject query1 = new BasicDBObject("id_paciente", id);
-        DBObject obj = collectionUsuarios.findOne(query1);
-        
-        if (obj!= null){
-            String id_usuario=obj.get("_id").toString();
-            DBCollection collectionChecks = db.getCollection("checkins");
-            BasicDBObject query = new BasicDBObject("id_usuario", id_usuario);
+//        DBCollection collectionUsuarios = db.getCollection("Pacientes");
+//        BasicDBObject query1 = new BasicDBObject("_id", id);
+//        DBObject obj = collectionUsuarios.findOne(query1);
+//        
+//        if (obj!= null){
+//            String id_usuario=obj.get("suministro").toString();
+            DBCollection collectionChecks = db.getCollection("Suministros");
+            BasicDBObject query = new BasicDBObject("id", id);
             DBCursor cursor = collectionChecks.find(query);
             
             co=  cursor.count();
             cursor.close();
-        }
-        
+//        }
+//        
         
         return co;
     }
@@ -104,7 +104,7 @@ public class PacienteDAO {
         
          
         Paciente paciente = new Paciente(obj.get("_id").toString(),obj.get("nombres").toString(), obj.get("aPaterno").toString(), 
-                obj.get("aMaterno").toString(), obj.get("fecnac").toString(), obj.get("correo").toString());
+                obj.get("aMaterno").toString(), obj.get("fecnac").toString(), obj.get("suministro").toString());
              
              
             
@@ -133,7 +133,7 @@ public class PacienteDAO {
                 .append("aPaterno", p.getPaterno())
                 .append("aMaterno", p.getMaterno())
                 .append("fecnac", p.getFecha_nacimiento())
-                .append("correo", p.getCorreo());                
+                .append("suministro", p.getCorreo());                
         coll.update(query, doc);
     
     }

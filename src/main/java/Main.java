@@ -1,6 +1,7 @@
 
 import com.google.gson.Gson;
 import pe.edu.clases.Suministro;
+import pe.edu.mongo.PacienteDAO;
 
 import pe.edu.mongo.UsuarioDAO;
 import pe.edu.ulima.ulpokemonapi.ulpokemonapi.dto.usuario.LoginRequest;
@@ -51,31 +52,29 @@ public class Main {
         });
         
                
-        post("/resta", (req, resp) -> {
+        post("/eliminar", (req, resp) -> {
             
-            NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);
+            String id = new Gson().fromJson(req.body(), String.class);
+            PacienteDAO p = new PacienteDAO();        
+            p.eliminarPaciente(id);            
             
-            
-            return numeros.getNum1()
-                   -numeros.getNum2();
+            return id;
         });
         
-        post("/multi", (req, resp) -> {
+        post("/modificar", (req, resp) -> {
             
-            NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);
+            String id = new Gson().fromJson(req.body(), String.class);
             
             
-            return numeros.getNum1()
-                   *numeros.getNum2();
+            return id;
         });
         
-        post("/divi", (req, resp) -> {
+        post("/listar", (req, resp) -> {
             
-            NumReq numeros = new Gson().fromJson(req.body(), NumReq.class);
+            String id = new Gson().fromJson(req.body(), String.class);
             
             
-            return (numeros.getNum1()
-                   /numeros.getNum2())*2;
+            return id;
         });
         
 
