@@ -104,18 +104,14 @@ public class UsuarioDAO {
         DBObject obj = coll.findOne(query);
         
         resp.setNum("1");
-        if (obj!=null){
-            DBCollection coll2 = db.getCollection("Suministros");
-            BasicDBObject query2 = new BasicDBObject("id", sum.getNum());
-            DBObject obj2 = coll2.findOne(query2);
-            resp.setNum(obj2.get("id").toString());
-            resp.setConsumo(Integer.valueOf(obj2.get("con").toString()));
-            resp.setFecha(obj2.get("fec").toString());
+        if (obj!=null){            
+            DBCollection coll2 = db.getCollection("Suministros");            
             BasicDBObject doc = new BasicDBObject("id", sum.getNum())
                 .append("con", sum.getConsumo())
                 .append("fec", sum.getFecha()); 
             //coll.update(query, doc);
             coll2.insert(doc);
+            return sum;
         }
                 
         return resp;
