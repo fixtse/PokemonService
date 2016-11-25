@@ -1,6 +1,8 @@
 
 import com.google.gson.Gson;
 import java.util.List;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 import pe.edu.clases.Paciente;
 import pe.edu.clases.Suministro;
 import pe.edu.mongo.PacienteDAO;
@@ -92,6 +94,18 @@ public class Main {
             
             return pacientes;
         });
+        
+        post("/crear", (req, resp) -> {
+            
+            Paciente p = new Gson().fromJson(req.body(), Paciente.class);
+            PacienteDAO dao = new PacienteDAO();
+            
+            String id = new PacienteDAO().registrarPaciente(p.getNombres(), p.getPaterno(), p.getMaterno(), p.getFecha_nacimiento(), p.getCorreo());
+            
+            return id;
+        });
+        
+        
         
 
         // Endpoint para realizar un login
