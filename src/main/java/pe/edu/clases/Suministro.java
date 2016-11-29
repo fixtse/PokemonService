@@ -5,11 +5,15 @@
  */
 package pe.edu.clases;
 
+import java.io.Serializable;
+
+
+
 /**
  *
  * @author fixt
  */
-public class Suministro {
+public class Suministro implements Serializable{
     
     private String num;
     private int consumo;

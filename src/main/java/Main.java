@@ -3,6 +3,7 @@ import com.google.gson.Gson;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpSession;
+import pe.edu.clases.Cliente;
 import pe.edu.clases.Paciente;
 import pe.edu.clases.Suministro;
 import pe.edu.mongo.PacienteDAO;
@@ -16,8 +17,8 @@ import static spark.Spark.post;
 public class Main {
 
     public static void main(String[] args) {
-        port(Integer.parseInt(System.getenv("PORT")));
-        //port(4567);
+        //port(Integer.parseInt(System.getenv("PORT")));
+        port(4567);
 
         //IPokeAPIClient client = ServiceGenerator.createService(IPokeAPIClient.class);
         
@@ -42,16 +43,40 @@ public class Main {
             
             
             UsuarioDAO user = new UsuarioDAO();
+            String sum = new Gson().fromJson(req.body(), String.class);
+            String cli = user.verSuministro(sum);
+            
+            return cli;
+           
+            
+        });
+        
+        post("/regSum", (req, resp) -> {
+            
+            
+            UsuarioDAO user = new UsuarioDAO();
             Suministro sum = new Gson().fromJson(req.body(), Suministro.class);
             
-            if(!user.verSuministro(sum).getNum().equals("1")){
+            if(!user.regSuministro(sum)){
                 return 1;
             }else{
                 return 0;
-            }            
-                  
+            }
+            
+        });
+        
+        
+        post("/pasCon", (req, resp) -> {
             
             
+            Cliente cliente = new Cliente();            
+            
+            
+            if(cliente.pasarConsumos()){
+                return 1;
+            }else{
+                return 0;
+            }   
             
         });
         
@@ -95,7 +120,18 @@ public class Main {
             return pacientes;
         });
         
-        post("/crear", (req, resp) -> {
+        post("/consumos", (req, resp) -> {
+            
+            String usuario = new Gson().fromJson(req.body(), String.class);
+            UsuarioDAO dao = new UsuarioDAO();
+            List<Suministro> suministros =  dao.obtenercant(dao.obtSuministro(usuario));         
+            
+            
+            
+            return suministros;
+        });
+        
+        post("/Crear", (req, resp) -> {
             
             Paciente p = new Gson().fromJson(req.body(), Paciente.class);
             PacienteDAO dao = new PacienteDAO();

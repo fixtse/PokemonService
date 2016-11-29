@@ -8,9 +8,17 @@ package pe.edu.mongo;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import org.bson.types.ObjectId;
+import pe.edu.clases.Paciente;
+import pe.edu.clases.Servidor;
 import pe.edu.clases.Suministro;
 import pe.edu.clases.Usuario;
 
@@ -56,25 +64,102 @@ public class UsuarioDAO {
         return b;
     }
     
-    public Suministro verSuministro(Suministro sum) throws UnknownHostException, Exception{
-        Suministro resp = new Suministro();
+    public String verSuministro(String sum) throws UnknownHostException, Exception{
+        String resp = "0";
         DB db = Coneccion.connectToMongo();
         DBCollection coll = db.getCollection("Pacientes");
-        BasicDBObject query = new BasicDBObject("suministro", sum.getNum());
+        BasicDBObject query = new BasicDBObject("suministro", sum);
         DBObject obj = coll.findOne(query);
         
-        resp.setNum("1");
+        
         if (obj!=null){            
-            DBCollection coll2 = db.getCollection("Suministros");            
-            BasicDBObject doc = new BasicDBObject("id", sum.getNum())
-                .append("con", sum.getConsumo())
-                .append("fec", sum.getFecha()); 
-            //coll.update(query, doc);
-            coll2.insert(doc);
-            return sum;
+//            DBCollection coll2 = db.getCollection("Suministros");            
+//            BasicDBObject doc = new BasicDBObject("id", sum.getNum())
+//                .append("con", sum.getConsumo())
+//                .append("fec", sum.getFecha()); 
+//            //coll.update(query, doc);
+//            coll2.insert(doc);
+            
+            String nombres = obj.get("nombres").toString();
+            String aPaterno = obj.get("aPaterno").toString();
+            String aMaterno = obj.get("aMaterno").toString();  
+            
+            resp = aPaterno+" "+aMaterno+" "+nombres;           
+            
         }
                 
         return resp;
+    }
+    
+    public Boolean regSuministro(Suministro sum) throws UnknownHostException, Exception{
+            
+            sum.setFecha(obtenerFechaHoraActual());
+            Servidor serv = new Servidor();
+            return serv.enviarSuministro(sum);            
+            
+    }
+    
+    
+    public static String obtenerFechaHoraActual() {
+        // Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT-05:00")); // No funciona
+        // c.getTime(); // Sigue saliendo la hora en GMT-00:00.
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.HOUR_OF_DAY, -5);
+
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        return df.format(c.getTime());
+    }
+    
+    public String obtSuministro(String usuario) throws UnknownHostException, Exception{
+        DB db = Coneccion.connectToMongo();
+        DBCollection coll = db.getCollection("Usuarios");
+        BasicDBObject query = new BasicDBObject("usuario", usuario);
+        DBObject obj = coll.findOne(query);
+        String id = obj.get("id_paciente").toString();
+        coll = db.getCollection("Pacientes");
+        query = new BasicDBObject("_id", new ObjectId(id));
+        obj = coll.findOne(query);
+        return obj.get("suministro").toString();
+    }
+    
+    public List<Suministro> obtenercant(String id) throws UnknownHostException, Exception{
+        
+        DB db = Coneccion.connectToMongo();
+        int co=0;
+        
+        DBCollection collectionChecks = db.getCollection("Suministros");
+        BasicDBObject query = new BasicDBObject("id", id);
+        DBCursor cursor = collectionChecks.find(query);
+
+        List<Suministro> suministros = new ArrayList<>();
+
+            while(cursor.hasNext()){
+                
+                DBObject doc = cursor.next();
+                
+                
+               
+                String fecnac = doc.get("fec").toString();               
+                int con =Integer.valueOf(doc.get("con").toString());
+                
+                
+                Suministro suministro = new Suministro(id,con, fecnac);
+                suministros.add(suministro);
+            }
+        cursor.close();
+        
+   
+        return suministros;
+    }
+    
+    public void pasarSuministor(Suministro sum) throws UnknownHostException, Exception{
+        DB db = Coneccion.connectToMongo();
+        DBCollection coll2 = db.getCollection("Suministros");            
+        BasicDBObject doc = new BasicDBObject("id", sum.getNum())
+            .append("con", sum.getConsumo())
+            .append("fec", sum.getFecha()); 
+        //coll.update(query, doc);
+        coll2.insert(doc);
     }
     
     
